@@ -5,35 +5,44 @@ from bs4 import BeautifulSoup as soup
 
 # Scrapping NEWEGG.com graphic cards
 
-WEB_URL = 'https://www.newegg.com/Video-Cards-Video-Devices/Category/ID-38?Tpk=graphics%20card';
+WEB_URL = 'https://www.newegg.com/Video-Cards-Video-Devices/Category/ID-38?Tpk=graphics%20card'
 
 
-# Open up the connection, grab the HTML content 
+# Open up the connection, grab the HTML content
 WEB_CLIENT = req(WEB_URL)
 
 RAW_HTML = WEB_CLIENT.read()
 
 WEB_CLIENT.close()
 
-PAGE_SOUP = soup(RAW_HTML,"html.parser")
+PAGE_SOUP = soup(RAW_HTML, "html.parser")
 
 
-print(PAGE_SOUP.h1)     # <h1 class="page-title-text">Video Cards &amp; Video Devices</h1>
+# <h1 class="page-title-text">Video Cards &amp; Video Devices</h1>
+print(PAGE_SOUP.h1)
 
-print(PAGE_SOUP.p)  
+print(PAGE_SOUP.p)
 
-# <p > Newegg.com - A great place to buy computers, computer parts, electronics, software, 
-# accessories, and DVDs online. With great prices, fast shipping, and top-rated customer 
+# <p > Newegg.com - A great place to buy computers, computer parts, electronics, software,
+# accessories, and DVDs online. With great prices, fast shipping, and top-rated customer
 # service - Newegg shopping upgraded ™< /p >
 
-IMAGE_CONTAINERS = PAGE_SOUP.findAll("div",{"class":"item-container"})
-print(len(IMAGE_CONTAINERS))
+IMAGE_CONTAINERS = PAGE_SOUP.findAll("div", {"class": "item-container"})
+# print(len(IMAGE_CONTAINERS))
 
-
+filename = "products.csv"
+f = open(filename, "w")
+headers = "BRAND, PRODUCT_NAME, SHIPPINH\n"
+f.write(headers)
 for container in IMAGE_CONTAINERS:
-    GRAPHIC_CARD_BRAND  = container.div.div.a.img['title']
-    TITLE_CONTAINER = container.findAll("a",{"class":"item-title"})
+    GRAPHIC_CARD_BRAND = container.div.div.a.img['title']
+    TITLE_CONTAINER = container.findAll("a", {"class": "item-title"})
     PRODUCT_NAME = TITLE_CONTAINER[0].text
-    SHIPPING_CONTAINER = container.findAll("li",{"class":"price-ship"})
+    SHIPPING_CONTAINER = container.findAll("li", {"class": "price-ship"})
     SHIPPING_PRICING = SHIPPING_CONTAINER[0].text.strip()
-    print(SHIPPING_PRICING)
+    # print("Brand : " + GRAPHIC_CARD_BRAND)
+    # print("Product name " + PRODUCT_NAME)
+    # print("SHIPPING COST"  + SHIPPING_PRICING)
+    f.write(GRAPHIC_CARD_BRAND + "," + PRODUCT_NAME.replace(",", "|") + "," + SHIPPING_PRICING + "\n")
+
+f.close()
