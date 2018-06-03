@@ -25,3 +25,15 @@ print(PAGE_SOUP.p)
 # <p > Newegg.com - A great place to buy computers, computer parts, electronics, software, 
 # accessories, and DVDs online. With great prices, fast shipping, and top-rated customer 
 # service - Newegg shopping upgraded ™< /p >
+
+IMAGE_CONTAINERS = PAGE_SOUP.findAll("div",{"class":"item-container"})
+print(len(IMAGE_CONTAINERS))
+
+
+for container in IMAGE_CONTAINERS:
+    GRAPHIC_CARD_BRAND  = container.div.div.a.img['title']
+    TITLE_CONTAINER = container.findAll("a",{"class":"item-title"})
+    PRODUCT_NAME = TITLE_CONTAINER[0].text
+    SHIPPING_CONTAINER = container.findAll("li",{"class":"price-ship"})
+    SHIPPING_PRICING = SHIPPING_CONTAINER[0].text
+    print(SHIPPING_PRICING)
