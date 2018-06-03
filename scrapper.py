@@ -35,5 +35,5 @@ for container in IMAGE_CONTAINERS:
     TITLE_CONTAINER = container.findAll("a",{"class":"item-title"})
     PRODUCT_NAME = TITLE_CONTAINER[0].text
     SHIPPING_CONTAINER = container.findAll("li",{"class":"price-ship"})
-    SHIPPING_PRICING = SHIPPING_CONTAINER[0].text
+    SHIPPING_PRICING = SHIPPING_CONTAINER[0].text.strip()
     print(SHIPPING_PRICING)
